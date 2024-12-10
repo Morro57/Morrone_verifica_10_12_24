@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prenotazione</title>
+</head>
+<body>
+    <h1>Prenotazione Biglietti</h1>
+    <form>
+        <table id="tabella" border="1px">
+            <tr>
+                <td><label>Codice di prenotazione</label></td>
+                <td><input type="text" id="codice"></td>
+            </tr>
+                
+            <tr>
+                <td>
+                    <label>Numero di Biglietti</label>
+                </td>
+                <td>
+                    <input type="number" id="biglietti" min="0" max="15000">
+                </td>
+            </tr>
+
+            <tr>
+                <td><button type="button" onclick="aggiungiPrenotazioni()">Aggiungi</button></td>
+                <td><button type="button"  onclick="mostraPrenotazioni()" >Stampa</button></td>
+                <!--In caso aggiungere il disabled-->
+            </tr>
+        </table>
+        <br><table border="1px">
+            <tr>
+                <th>Codice di Prenotazione</th>
+                <th>Numero di Biglietti</th>
+                <th>Importo</th>
+            </tr>
+        </table>
+
+    </form>
+
+    <div id="output"></div>
+
+    <script>
+
+        var listaPrenotazioni = []
+
+        function aggiungiPrenotazioni(){
+            prenotazioni ={
+                codice: document.getElementById('codice').value,
+                biglietti: document.getElementById('biglietti').value,
+                importo: null
+            }
+            
+            const prezzoBiglietti = 20;
+
+            if(prenotazioni.codice==""){
+                alert("Il codice di prenotazione non è stato inserito.")
+            }else if(prenotazioni.biglietti==""){
+                alert("Il numero di biglietti non è stato inserito.")
+            }else if (prenotazioni.biglietti<=0){
+                alert("Errore, numero di biglietti inseriti non valido per la prenotazione.")
+            }else{
+                prenotazioni.importo = prezzoBiglietti*prenotazioni.biglietti;
+                prenotazioni.importo = calcoloImporto(prenotazioni.biglietti,prenotazioni.importo);
+                
+                listaPrenotazioni.push(prenotazioni);
+                //document.getElementById('codice').innerText("");
+                //document.getElementById('biglietti').value("0");
+
+            }
+
+
+            function calcoloImporto(biglietti,importo){
+                if(biglietti>=1 && biglietti<=4){
+                    return importo*=1;
+                }else if(biglietti>4 && biglietti<10){
+                    return importo= importo*0.9;
+                }else if(biglietti>=10){
+                    return importo= importo*0.8;
+                }
+            }
+
+        }
+
+        function mostraPrenotazioni(){ 
+
+                for(prenotazioni of listaPrenotazioni){
+                    var tabella = `
+                <tr border="1px">
+                    <td>${prenotazioni.codice}</td>
+                    <td>${prenotazioni.biglietti}</td>
+                    <td>${(prenotazioni.importo).toFixed(2)}€</td>
+                </tr> <br>`;
+                    document.getElementById('output').innerHTML+=tabella;
+                }
+
+        }
+    </script>
+    
+</body>
+</html>
